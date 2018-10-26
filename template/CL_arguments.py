@@ -28,6 +28,7 @@ def parse_arguments(args=None):
     _optimizer_options(parser)
     _system_options(parser)
     _triplet_options(parser)
+    _process_activation_options(parser)
 
     ###############################################################################
     # Parse argument
@@ -52,7 +53,7 @@ def _general_parameters(parser):
     General options
     """
     # List of possible custom runner class. A runner class is defined as a module in template.runner
-    runner_class_options = ["image_classification", "point_cloud", "triplet", "apply_model"]
+    runner_class_options = ["image_classification", "point_cloud", "triplet", "apply_model", "process_activation"]
 
     parser_general = parser.add_argument_group('GENERAL', 'General Options')
     parser_general.add_argument('--experiment-name',
@@ -281,3 +282,27 @@ def _triplet_options(parser):
                                 type=int,
                                 default=5, metavar='N',
                                 help='re-generate triplets every N epochs')
+
+
+def _process_activation_options(parser):
+    """
+    Process activation options
+
+    These parameters are used by the runner class template.runner.triplet
+    """
+    parser_process = parser.add_argument_group('PROCESS', 'Process Activation Options')
+    parser_process.add_argument('--train',
+                                action='store_true',
+                                help='Train the network and process the activation')
+    parser_process.add_argument('--save-images',
+                                action='store_true',
+                                default=False,
+                                help='Save image\'s input')
+    parser_process.add_argument('--process-size',
+                                type=int,
+                                default=10,
+                                help='number of images processed')
+    parser_process.add_argument('--process-every',
+                                type=int,
+                                default=5,
+                                help='Epochs period where activation process is done')
